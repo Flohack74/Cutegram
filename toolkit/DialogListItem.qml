@@ -2,21 +2,89 @@ import QtQuick 2.4
 import AsemanTools 1.0
 import TelegramQml 2.0 as Telegram
 import QtGraphicalEffects 1.0
+import Ubuntu.Components 1.3
+import Ubuntu.Components.Popups 1.3
 import "../awesome"
 import "../toolkit" as ToolKit
 import "../globals"
-import "../thirdparty"
+//import "../thirdparty"
 
-Item {
+ListItem {
     id: item
-    height: CutegramSettings.minimalMode? 56*Devices.density : 64*Devices.density
+    height: units.gu(7)
 
     property alias engine: img.engine
-    property alias showButtons: buttons.visible
 
     signal active()
     signal forwardRequest(variant inputPeer, int msgId)
     signal clearHistoryRequest(variant inputPeer)
+    signal peerInfoRequest(variant inputPeer)
+
+    leadingActions: ListItemActions {
+        actions: [
+            /*Action {
+                iconName: "system-log-out"
+                text: i18n.tr("Leave chat")
+                visible: connected
+
+                onTriggered: {
+                    PopupUtils.open(Qt.resolvedUrl("qrc:/qml/ui/dialogs/ConfirmationDialog.qml"),
+                        list_item, {
+                            text: i18n.tr("Are you sure you want to leave this chat?"),
+                            onAccept: function() {
+                                pageStack.clear()
+                                telegram.messagesDeleteHistory(dialogId, true)
+                            }
+                        }
+                    );
+                }
+            },*/
+            Action {
+                iconName: "edit-clear"
+                text: i18n.tr("Clear history")
+
+                onTriggered: {
+                    clearHistoryRequest(model.peer)
+                    /*PopupUtils.open(Qt.resolvedUrl("qrc:/qml/ui/dialogs/ConfirmationDialog.qml"),
+                        list_item, {
+                            text: i18n.tr("Are you sure you want to clear history?"),
+                            onAccept: function() {
+                                clearHistoryRequest(model.peer)
+                            }
+                        }
+                    );*/
+                }
+            },
+            Action {
+                iconName: "mail-mark-read"
+                text: i18n.tr("Mark as read")
+
+                onTriggered: {
+                    model.unreadCount = 0
+                    /*PopupUtils.open(Qt.resolvedUrl("qrc:/qml/ui/dialogs/ConfirmationDialog.qml"),
+                        list_item, {
+                            text: i18n.tr("Are you sure you want to clear history?"),
+                            onAccept: function() {
+                                model.unreadCount = 0
+                            }
+                        }
+                    );*/
+                }
+            }
+        ]
+    }
+
+    trailingActions: ListItemActions {
+        actions: [
+            Action {
+                iconName: "info"
+                text: i18n.tr("Info")
+                onTriggered: {
+                    item.peerInfoRequest(model.peer)
+                }
+            }
+        ]
+    }
 
     Row {
         id: row
@@ -25,70 +93,6 @@ Item {
         anchors.margins: 10*Devices.density
         anchors.verticalCenter: parent.verticalCenter
         spacing: 6*Devices.density
-
-        Item {
-            id: buttons
-            width: 12*Devices.density
-            anchors.verticalCenter: parent.verticalCenter
-            height: 40*Devices.density
-
-            Item {
-                anchors.top: parent.top
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width
-                height: parent.height/2
-
-                Text {
-                    anchors.centerIn: parent
-                    font.family: Awesome.family
-                    font.pixelSize: 9*Devices.fontDensity
-                    color: {
-                        if(model.category == CutegramEnums.dialogsCategoryEmpty)
-                            return "#00000000"
-                        else
-                        if(model.category == CutegramEnums.dialogsCategoryFavorite)
-                            return "#e3cf2a"
-                        else
-                        if(model.category == CutegramEnums.dialogsCategoryLove)
-                            return "#db2424"
-                        else
-                            return "#00000000"
-                    }
-                    text: {
-                        if(model.category == CutegramEnums.dialogsCategoryEmpty)
-                            return ""
-                        else
-                        if(model.category == CutegramEnums.dialogsCategoryFavorite)
-                            return Awesome.fa_star
-                        else
-                        if(model.category == CutegramEnums.dialogsCategoryLove)
-                            return Awesome.fa_heart
-                        else
-                            return ""
-                    }
-                }
-            }
-
-            MouseArea {
-                id: mute_marea
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width
-                height: parent.height/2
-                onClicked: model.mute = !model.mute
-
-                Text {
-                    font.family: Awesome.family
-                    anchors.centerIn: parent
-                    font.pixelSize: 9*Devices.fontDensity
-                    color: "#888888"
-                    text: model.mute? Awesome.fa_bell_slash_o : Awesome.fa_bell_o
-                    visible: mute_marea.containsMouse || model.mute
-                }
-            }
-        }
 
         Rectangle {
             id: avatar
@@ -110,31 +114,68 @@ Item {
         }
 
         Item {
-            width: row.width - avatar.width - row.spacing - (buttons.visible? buttons.width + row.spacing : 0)
+            width: row.width - avatar.width - row.spacing
             height: 24*Devices.density
             anchors.verticalCenter: parent.verticalCenter
 
-            Text {
+            Item {
+                id: details
                 anchors.left: parent.left
-                anchors.right: msg_state_txt.left
-                anchors.rightMargin: 10*Devices.density
-                anchors.verticalCenter: CutegramSettings.minimalMode? parent.verticalCenter : parent.top
-                horizontalAlignment: Text.AlignLeft
-                font.pixelSize: 9*Devices.fontDensity
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                elide: Text.ElideRight
-                maximumLineCount: 1
-                color: "#333333"
-                text: CutegramEmojis.parse(model.title)
+                anchors.right: msg_state_txt.visible ? msg_state_txt.left : date_txt.left
+                anchors.rightMargin: 5*Devices.density
+                height: 24*Devices.density
+                anchors.verticalCenter: parent.verticalCenter
+                property int spacing: 5*Devices.fontDensity
+
+                Text {
+                    id: chat_icon
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.top
+                    horizontalAlignment: Text.AlignLeft
+                    font.family: Awesome.family
+                    font.pixelSize: 9*Devices.fontDensity
+                    color: "grey"
+                    text: Awesome.fa_users
+                    visible: !model.user
+                }
+
+                Text {
+                    id: title
+                    anchors.left: chat_icon.visible ? chat_icon.right : parent.left
+                    anchors.leftMargin: chat_icon.visible ? details.spacing : 0
+                    anchors.right: parent.right
+                    anchors.rightMargin: mute_icon.visible ? (mute_icon.contentWidth + mute_icon.leftSpacing) : 0
+                    anchors.verticalCenter: parent.top
+                    horizontalAlignment: Text.AlignLeft
+                    font.weight: Font.DemiBold
+                    font.pixelSize: units.dp(17)//FontUtils.sizeToPixels("large")
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    elide: Text.ElideRight
+                    maximumLineCount: 1
+                    text: CutegramEmojis.parse(model.title)
+                }
+
+                Text {
+                    id: mute_icon
+                    anchors.left: chat_icon.visible ? chat_icon.right : parent.left
+                    anchors.leftMargin: leftSpacing + Math.min(title.contentWidth, parent.width-contentWidth-details.spacing)
+                    anchors.verticalCenter: parent.top
+                    horizontalAlignment: Text.AlignLeft
+                    font.family: Awesome.family
+                    font.pixelSize: 9*Devices.fontDensity
+                    color: "grey"
+                    text: model.mute? Awesome.fa_bell_slash_o : Awesome.fa_bell_o
+                    visible: model.mute
+                    property int leftSpacing: chat_icon.visible ? 2*details.spacing : details.spacing
+                }
             }
 
             Text {
                 id: date_txt
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.top
-                font.pixelSize: 9*Devices.fontDensity
-                color: "#666666"
-                visible: !CutegramSettings.minimalMode
+                font.pixelSize: units.dp(12)
+                color: "grey"
                 text: model.messageDate
             }
 
@@ -147,7 +188,7 @@ Item {
                 font.pixelSize: 9*Devices.fontDensity
                 font.letterSpacing: -7*Devices.density
                 color: "#75CB46"
-                visible: !CutegramSettings.minimalMode
+                visible: model.messageOut
                 text: {
                     if(!model.messageOut)
                         return ""
@@ -164,9 +205,8 @@ Item {
                 anchors.right: unread_rect.left
                 anchors.rightMargin: 6*Devices.density
                 anchors.verticalCenter: parent.bottom
-                font.pixelSize: 9*Devices.fontDensity
-                color: "#666666"
-                visible: !CutegramSettings.minimalMode
+                font.pixelSize: units.dp(15)
+                color: "grey"
                 text: {
                     if(model.typing.length == 0) {
                         return CutegramEmojis.parse(model.message)
@@ -182,19 +222,20 @@ Item {
 
             Rectangle {
                 id: unread_rect
-                height: 14*Devices.density
-                width: unread_txt.width + 8*Devices.density
-                anchors.verticalCenter: CutegramSettings.minimalMode? parent.verticalCenter : parent.bottom
+                height: units.gu(2.5)
+                radius: width*0.5
+                width: unread_txt.width + units.gu(1.5)
+                anchors.verticalCenter: parent.bottom
                 anchors.right: parent.right
-                color: model.mute? "#959595" : "#db2424"
-                radius: 2*Devices.density
+                color: model.mute? "grey" : "#5ec245"
                 visible: model.unreadCount
 
                 Text {
                     id: unread_txt
                     anchors.centerIn: parent
-                    font.pixelSize: 9*Devices.fontDensity
-                    color: "#ffffff"
+                    font.weight: Font.DemiBold
+                    font.pixelSize: FontUtils.sizeToPixels("small")
+                    color: "white"
                     text: model.unreadCount
                 }
             }
@@ -247,25 +288,15 @@ Item {
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: {
             if(mouse.button == Qt.RightButton) {
-                var loved = (model.category == CutegramEnums.dialogsCategoryLove)
-                var favorited = (model.category == CutegramEnums.dialogsCategoryFavorite)
-                var act = Desktop.showMenu([qsTr("Mark as read"),
-                                            loved?qsTr("Unlove"):qsTr("Love"),
-                                            favorited?qsTr("Unfavorite"):qsTr("Favorite"), "",
-                                            qsTr("Clear History")])
+                var act = Desktop.showMenu([qsTr("Mark as read"), "",
+                                            qsTr("Clear history")])
                 switch(act) {
                 case 0:
                     model.unreadCount = 0
                     break
-                case 1:
-                    model.category = loved? CutegramEnums.dialogsCategoryEmpty : CutegramEnums.dialogsCategoryLove
-                    break
                 case 2:
-                    model.category = favorited? CutegramEnums.dialogsCategoryEmpty : CutegramEnums.dialogsCategoryFavorite
-                    break
-                case 4:
-                    if(Desktop.yesOrNo(CutegramGlobals.mainWindow, qsTr("Clear History?"), qsTr("Are you sure about clear history?")))
-                        clearHistoryRequest(model.peer)
+                    //if(Desktop.yesOrNo(CutegramGlobals.mainWindow, qsTr("Clear History?"), qsTr("Are you sure about clear history?")))
+                    clearHistoryRequest(model.peer)
                     break
                 }
             } else {

@@ -12,7 +12,7 @@ AccountHomeItem {
 
     property Engine engine
     property InputPeer currentPeer
-    property Settings categoriesSettings
+    //property Settings categoriesSettings
 
     readonly property bool refreshing: item? item.refreshing : false
 
@@ -47,7 +47,7 @@ AccountHomeItem {
                 width: mbrlist.width
                 engine: dialog.engine
                 currentPeer: dialog.currentPeer
-                categoriesSettings: dialog.categoriesSettings
+                //categoriesSettings: dialog.categoriesSettings
                 onClearHistoryRequest: dialog.clearHistoryRequest(inputPeer)
                 onDeleteDialogRequest: dialog.deleteDialogRequest(inputPeer)
             }

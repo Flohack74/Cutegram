@@ -24,8 +24,8 @@ Item {
         id: avatar_img
         width: parent.width*2
         height: parent.height*2
-        source: privates.user
-        engine: privates.engine
+        source: null
+        engine: null
         smooth: true
         visible: false
 

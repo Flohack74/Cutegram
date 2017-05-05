@@ -1,4 +1,5 @@
 import QtQuick 2.4
+import TelegramQml 2.0
 import AsemanTools 1.0
 import TelegramQml 2.0 as Telegram
 import QtGraphicalEffects 1.0
@@ -9,7 +10,7 @@ Rectangle {
     id: authenticating
     color: "#f7f7f7"
 
-    property alias engine: auth.engine
+    property Engine engine
     property bool started: false
 
     onStartedChanged: {
@@ -45,6 +46,8 @@ Rectangle {
             lastState = state
         }
 
+        engine: authenticating.engine
+
         property int lastState: Telegram.Authenticate.AuthUnknown
     }
 
@@ -60,7 +63,7 @@ Rectangle {
             var res = 0
             switch(auth.state) {
             case Telegram.Authenticate.AuthUnknown:
-                res = (engine.phoneNumber.length!=0? 1 : 0)
+                res = (auth.engine.phoneNumber.length!=0? 1 : 0)
                 break;
             case Telegram.Authenticate.AuthCheckingPhoneError:
             case Telegram.Authenticate.AuthCodeRequestingError:

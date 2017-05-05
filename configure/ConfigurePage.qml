@@ -6,42 +6,42 @@ import "../awesome"
 import "../toolkit" as ToolKit
 import "../globals"
 
-ToolKit.AccountPageItem {
-    id: confPage
+ToolKit.StackedPage {
+    id: stackedPage
+    title: i18n.tr("Add new...")
 
-    property variant engine
-    readonly property bool refreshing: item? item.refreshing : false
+    ToolKit.AccountPageItem {
+        id: confPage
+        anchors.top: stackedPage.header.bottom
 
-    delegate: Item {
-        anchors.fill: parent
-
-        property alias refreshing: inner.refreshing
-
-        Flickable {
-            id: flick
+        delegate: Item {
             anchors.fill: parent
-            flickableDirection: Flickable.VerticalFlick
-            contentWidth: width
-            contentHeight: inner.height
 
-            ConfigurePageInner {
-                id: inner
-                width: flick.width
-                engine: confPage.engine
+            Flickable {
+                id: flick
+                anchors.fill: parent
+                flickableDirection: Flickable.VerticalFlick
+                contentWidth: width
+                contentHeight: inner.height
+
+                ConfigurePageInner {
+                    id: inner
+                    width: flick.width
+                    engine: stackedPage.engine
+                }
             }
-        }
 
-        NormalWheelScroll {
-            flick: flick
-        }
+            NormalWheelScroll {
+                flick: flick
+            }
 
-        PhysicalScrollBar {
-            anchors.right: flick.right
-            height: flick.height
-            width: 6*Devices.density
-            color: CutegramGlobals.baseColor
-            scrollArea: flick
+            PhysicalScrollBar {
+                anchors.right: flick.right
+                height: flick.height
+                width: 6*Devices.density
+                color: CutegramGlobals.baseColor
+                scrollArea: flick
+            }
         }
     }
 }
-

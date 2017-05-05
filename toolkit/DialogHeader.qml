@@ -1,104 +1,189 @@
 import QtQuick 2.4
-import AsemanTools 1.0
-import TelegramQml 2.0 as Telegram
-import QtGraphicalEffects 1.0
-import "../awesome"
-import "../toolkit" as ToolKit
-import "../globals"
+import Ubuntu.Components 1.3 as Components
+import TelegramQml 2.0
 
-Rectangle {
+//import "qrc:/qml/js/avatar.js" as Avatar
+//import "qrc:/qml/js/colors.js" as Colors
+
+Components.PageHeader {
     id: header
-    color: "#00000000"
 
-    property alias engine: details.engine
-    property alias currentPeer: details.peer
-    property bool detailMode
+    property Engine engine
+    property InputPeer currentPeer
 
-    signal detailRequest()
-    signal mediaRequest()
-    signal searchRequest(variant peer)
+    title: details.displayName
+    property string subtitle: details.statusText
 
-    Telegram.PeerDetails {
+    signal clicked()
+
+    PeerDetails {
         id: details
+        engine: header.engine
+        peer: header.currentPeer
     }
 
-    MouseArea {
+    contents: Item {
         anchors.fill: parent
-        height: parent.height
-        onClicked: detailRequest()
-    }
 
-    Row {
-        id: title_row
-        x: backBtn.x - 10*Devices.density
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 10*Devices.density
-        opacity: 1 - backBtn.opacity
+        ProfileImage {
+            id: img
+            width: height
+            height: units.gu(4)
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+            }
+            engine: header.engine
+            source: header.currentPeer
+        }
 
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 10*Devices.fontDensity
-            color: CutegramGlobals.titleBarTextsColor
-            text: {
-                var emoji = CutegramEmojis.parse(details.displayName)
-                return emoji
+        /*Avatar {
+            id: headerImage
+            width: height
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+            }
+
+            telegram: header.telegram
+            dialog: header.dialog
+
+            RotationAnimation {
+                id: connectingAnimation
+                target: headerImage
+                direction: RotationAnimation.Clockwise
+                from: 0
+                to: 359
+                loops: Animation.Infinite
+                duration: 5000
+                alwaysRunToEnd: false
+                running: isConnecting && headerImage.isLogo
+                properties: "rotation"
+
+                onRunningChanged: {
+                    if (!running) {
+                        connectingAnimation.stop();
+                        headerImage.rotation = 0;
+                    }
+                }
             }
         }
 
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 9*Devices.fontDensity
-            color: CutegramGlobals.titleBarTextsColor
-            opacity: 0.5
-            text: details.statusText
+        //'Lock' image that is overlayed ontop of the Avatar conponent
+        Image {
+            id: secretChatImage
+            anchors {
+                left: headerImage.right
+                leftMargin: -width-5
+                top: headerImage.top
+                topMargin: units.dp(2)
+            }
+            width: units.gu(1)
+            height: units.gu(1.5)
+            source: "qrc:/qml/files/lock.png"
+            sourceSize: Qt.size(width, height)
+            visible: header.isSecretChat
+        }*/
+
+        Components.Label {
+            id: titleText
+            anchors {
+                top: parent.top
+                left: img.right
+                leftMargin: units.gu(1)
+            }
+            verticalAlignment: Text.AlignVCenter
+            width: parent.width
+
+            fontSize: "large"
+            elide: Text.ElideRight
+            wrapMode: Text.WordWrap
+            maximumLineCount: 1
+            text: header.title.length === 0 ? i18n.tr("Telegram") : header.title
+
+            state: header.subtitle.length > 0 ? "subtitle" : "default"
+            states: [
+                State {
+                    name: "default"
+                    AnchorChanges {
+                        target: titleText
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    PropertyChanges {
+                        target: titleText
+                        height: parent.height
+                        anchors.topMargin: units.gu(0.7)
+                    }
+                },
+                State {
+                    name: "subtitle"
+                    PropertyChanges {
+                        target: titleText
+                        height: parent.height / 2
+                        anchors.topMargin: units.gu(0.35)
+                    }
+                }
+            ]
+
+            transitions: [
+                Transition {
+                    AnchorAnimation {
+                        duration: Components.UbuntuAnimation.FastDuration
+                    }
+                }
+            ]
         }
-    }
 
-    Text {
-        id: backBtn
-        x: detailMode? 10*Devices.density : 20*Devices.density
-        anchors.verticalCenter: parent.verticalCenter
-        color: header.currentPeer? CutegramGlobals.titleBarTextsColor : "#aaaaaa"
-        visible: opacity != 0
-        opacity: detailMode? 1 : 0
-        font.family: Awesome.family
-        font.pixelSize: 18*Devices.fontDensity
-        text: Awesome.fa_angle_left
+        Components.Label {
+            id: subtitleText
+            anchors {
+                left: img.right
+                leftMargin: units.gu(1)
+                bottom: parent.bottom
+                bottomMargin: units.gu(0.15)
+            }
+            verticalAlignment: Text.AlignVCenter
+            height: parent.height / 2
+            width: parent.width
 
-        Behavior on opacity {
-            NumberAnimation{easing.type: Easing.OutCubic; duration: 250}
+            fontSize: "small"
+            elide: Text.ElideRight
+            wrapMode: Text.WordWrap
+            maximumLineCount: 1
+            text: header.subtitle
+            color: "grey"
+
+            Connections {
+                target: header
+                onSubtitleChanged: {
+                    subtitleText.opacity = 0;
+                    subtitleText.text = "";
+                    subtitleTextTimer.start();
+                }
+            }
+
+            Timer {
+                id: subtitleTextTimer
+                interval: Components.UbuntuAnimation.FastDuration
+                onTriggered: {
+                    subtitleText.text = header.subtitle;
+                    subtitleText.opacity = 1;
+                }
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Components.UbuntuAnimation.FastDuration
+                }
+            }
         }
-        Behavior on x {
-            NumberAnimation{easing.type: Easing.OutCubic; duration: 250}
-        }
-    }
 
-    Row {
-        anchors.right: parent.right
-        height: parent.height
-        anchors.margins: 10*Devices.density
-
-        Button {
-            width: height
-            height: parent.height
-            textFont.family: Awesome.family
-            textFont.pixelSize: 13*Devices.fontDensity
-            highlightColor: header.currentPeer? "#66e6e6e6" : "#00000000"
-            textColor: header.currentPeer? CutegramGlobals.titleBarTextsColor : "#aaaaaa"
-            text: Awesome.fa_folder_open_o
-            onClicked: mediaRequest()
-        }
-
-        Button {
-            width: height
-            height: parent.height
-            textFont.family: Awesome.family
-            textFont.pixelSize: 13*Devices.fontDensity
-            highlightColor: header.currentPeer? "#66e6e6e6" : "#00000000"
-            textColor: header.currentPeer? CutegramGlobals.titleBarTextsColor : "#aaaaaa"
-            text: Awesome.fa_search
-            onClicked: searchRequest(details.peer)
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                mouse.accepted = true;
+                header.clicked();
+            }
         }
     }
 }
-

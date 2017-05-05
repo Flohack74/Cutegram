@@ -20,10 +20,10 @@ Item {
 
     signal replyRequest(variant peer, variant message)
 
-    Connections {
+    /*Connections {
         target: CutegramGlobals.mainWindow
         onActiveChanged: if(CutegramGlobals.mainWindow.active && mlmodel.currentPeer) mlmodel.markAsRead()
-    }
+    }*/
 
     Telegram.MessageListModel {
         id: mlmodel
@@ -39,7 +39,7 @@ Item {
 
             return hours + ":" + minutes
         }
-        onCountChanged: if(count && CutegramGlobals.mainWindow.active) markAsRead()
+        onCountChanged: if(count/* && CutegramGlobals.mainWindow.active*/) markAsRead()
         onIsEmptyChanged: {
             if(focusAfterLoaded || isEmpty) return
             listv.positionViewAtBeginning()
@@ -257,14 +257,6 @@ Item {
 
     NormalWheelScroll {
         flick: listv
-    }
-
-    PhysicalScrollBar {
-        anchors.right: listv.right
-        height: listv.height
-        width: 6*Devices.density
-        color: CutegramGlobals.baseColor
-        scrollArea: listv
     }
 
     ToolKit.ErrorItem {

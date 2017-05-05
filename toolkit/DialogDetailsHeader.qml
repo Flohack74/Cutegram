@@ -11,7 +11,7 @@ Item {
 
     property alias engine: details.engine
     property alias currentPeer: details.peer
-    property Settings categoriesSettings
+    //property Settings categoriesSettings
 
     property alias refreshing: details.refreshing
 
@@ -20,10 +20,10 @@ Item {
 
     onCurrentPeerChanged: refresh()
 
-    Connections {
+    /*Connections {
         target: categoriesSettings
         onValueChanged: refresh()
-    }
+    }*/
 
     Telegram.PeerDetails {
         id: details
@@ -162,7 +162,7 @@ Item {
         Row {
             width: parent.width
 
-            Button {
+            /*Button {
                 id: love_btn
                 height: width
                 highlightColor: CutegramGlobals.foregroundColor
@@ -215,7 +215,7 @@ Item {
                     else
                         text = Awesome.fa_star_o
                 }
-            }
+            }*/
             Button {
                 id: mute_btn
                 height: width
@@ -289,8 +289,8 @@ Item {
     }
 
     function refresh() {
-        love_btn.refresh()
-        fav_btn.refresh()
+        //love_btn.refresh()
+        //fav_btn.refresh()
         nameTxt.readOnly = true
     }
 }

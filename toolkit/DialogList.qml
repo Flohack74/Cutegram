@@ -19,6 +19,8 @@ ToolKit.TgRectangle {
     property alias refreshing: dmodel.refreshing
 
     signal forwardRequest(variant inputPeer, int msgId)
+    signal peerInfoRequest(variant inputPeer)
+
 
     onCurrentPeerChanged: dlist.currentIndex = dmodel.indexOf(currentPeer)
 
@@ -85,7 +87,7 @@ ToolKit.TgRectangle {
         }
     }
 
-    AsemanListView {
+    ListView {
         id: listv
         anchors.fill: parent
         model: dmodel
@@ -112,6 +114,7 @@ ToolKit.TgRectangle {
                 dlist.forwardRequest(inputPeer, msgId)
             }
             onClearHistoryRequest: clearHistory(inputPeer, true)
+            onPeerInfoRequest: dlist.peerInfoRequest(inputPeer)
         }
 
         highlight: Rectangle {
@@ -121,17 +124,17 @@ ToolKit.TgRectangle {
         }
     }
 
-    NormalWheelScroll {
+    /* NormalWheelScroll {
         flick: listv
-    }
+    } */
 
-    PhysicalScrollBar {
+    /* PhysicalScrollBar {
         anchors.right: listv.right
         height: listv.height
         width: 6*Devices.density
         color: CutegramGlobals.baseColor
         scrollArea: listv
-    }
+    } */
 
     function clearHistory(inputPeer, justClear) {
         dmodel.clearHistory(inputPeer, justClear)

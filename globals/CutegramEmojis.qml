@@ -28,7 +28,9 @@ AsemanObject {
     }
 
     function parse(code) {
-        return cemojis[defaultEmoji].parse(code)
+        var parsedCode = cemojis[defaultEmoji].parse(code);
+        parsedCode = parsedCode.split(' class="emoji" ').join(' class="emoji" width="18" height="18" ');
+        return parsedCode;
     }
 
     function getLink(code, size) {
