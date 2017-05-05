@@ -29,6 +29,7 @@ Cutegram 3.x completely written using QML. So there is no need to build and comp
 - [ ] Merge IntroPage from v2
 - [ ] Merge SettingsPage from v2
 - [ ] Merge DialogDetailsPage from v2
+- [ ] Merge ContactsPage and AddressBook from v2
 - [ ] Add ContentHub
 - [ ] Merge DialogPage from v2
 - [ ] Merge missing pages from v2
