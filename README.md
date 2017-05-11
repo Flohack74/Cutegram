@@ -25,8 +25,8 @@ Cutegram 3.x completely written using QML. So there is no need to build and comp
 - [x] Use AdaptivePageLayout
 - [x] Minor main pages refactoring
 - [ ] Create a component in globals directory to store font sizes, colors, etc.
-- [ ] Merge AccountPage from v2 (partially done)
-- [ ] Merge IntroPage from v2
+- [x] Merge AccountPage from v2 (partially-done/enough)
+- [x] Merge IntroPage from v2 (partially-done/enough)
 - [ ] Merge SettingsPage from v2
 - [ ] Merge DialogDetailsPage from v2
 - [ ] Merge ContactsPage and AddressBook from v2
@@ -38,7 +38,7 @@ Cutegram 3.x completely written using QML. So there is no need to build and comp
 - [ ] Do not use Aseman.Keychain, write data in files as temporary workaround
 - [ ] Remove AsemanTools dependency
 - [ ] Add ubuntu-push notifications
-- [ ] Code cleanup
+- [ ] Massive code cleanup
 
 #### libqtelegram/TelegramQML
 - [ ] Fix file transfers

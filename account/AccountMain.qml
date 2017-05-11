@@ -1,6 +1,7 @@
 import QtQuick 2.4
 import Ubuntu.Components 1.3
 import TelegramQml 2.0
+import AsemanTools 1.0
 import "../authenticating" as Authenticating
 import "../toolkit" as ToolKit
 //import "../add" as Add
@@ -63,10 +64,12 @@ Rectangle {
             if (engine.phoneNumber.length == 0 || engine.state == Engine.AuthNeeded) {
                 if (!authentication)
                     authentication = auth_component.createObject(pageStack)
-                if (!firstInitialize)
+                if (pageStack.primaryPage != authentication)
+                {
                     pageStack.clear()
-                pageStack.primaryPage = authentication;
-                pageStack.forceSinglePage = true;
+                    pageStack.primaryPage = authentication;
+                    pageStack.forceSinglePage = true;
+                }
                 if (dialogList)
                     dialogList.destroy()
             }
@@ -74,15 +77,16 @@ Rectangle {
             {
                 if (!dialogList)
                     dialogList = dialog_list_component.createObject(pageStack)
-                if (!firstInitialize)
+                if (pageStack.primaryPage != dialogList)
                 {
-                    signedIn()
                     pageStack.clear()
+                    pageStack.forceSinglePage = false;
+                    pageStack.primaryPage = dialogList;
                 }
-                pageStack.forceSinglePage = false;
-                pageStack.primaryPage = dialogList;
                 if (authentication)
                     authentication.destroy()
+                if (!firstInitialize)
+                    signedIn()
             }
         }
 
@@ -92,7 +96,7 @@ Rectangle {
 
         Component {
             id: auth_component
-            AuthenticationPage {
+            Authenticating.AuthPage {
                 id: authPage
                 engine: pageStack.engine
                 stack: pageStack
@@ -186,5 +190,50 @@ Rectangle {
         }
 
         Component.onCompleted: checkAuth(true)
+
+
+        function showWaitOverlay(message) {
+            waitOverlay.text = message;
+        }
+
+        function hideWaitOverlay() {
+            waitOverlay.text = "";
+        }
+    }
+
+    Item {
+        id: waitOverlay
+
+        property alias text: txt.text
+        anchors.fill: parent
+        visible: text != ""
+
+        Rectangle {
+            anchors.fill: parent
+            color: "#ffffff"
+            opacity: 0.5
+        }
+
+        Column {
+            anchors.centerIn: parent
+            spacing: 4*Devices.density
+
+            Indicator {
+                id: indicator
+                running: true
+                anchors.horizontalCenter: parent.horizontalCenter
+                modern: true
+                light: false
+                indicatorSize: 20*Devices.density
+            }
+
+            Text {
+                id: txt
+                text: ""
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 10*Devices.fontDensity
+                color: "#333333"
+            }
+        }
     }
 }

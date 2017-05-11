@@ -99,10 +99,10 @@ ListItem {
             height: item.height - 16*Devices.density
             width: height
             anchors.verticalCenter: parent.verticalCenter
-            color: "#00000000"
+            color: TelegramColors.transparent
             radius: width/2
             border.width: 1*Devices.density
-            border.color: model.isOnline? "#75CB46" : "#00000000"
+            border.color: model.isOnline? TelegramColors.defaultOnline : TelegramColors.transparent
 
             ToolKit.ProfileImage {
                 id: img

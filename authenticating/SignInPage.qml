@@ -1,11 +1,12 @@
 import QtQuick 2.4
+import Ubuntu.Components 1.3
 import AsemanTools 1.0
 import TelegramQml 2.0 as Telegram
 import QtGraphicalEffects 1.0
 import "../awesome"
 import "../globals"
 
-Item {
+Page {
     id: body
 
     property alias error: error_txt.text

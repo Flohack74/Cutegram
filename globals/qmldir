@@ -3,3 +3,4 @@ singleton CutegramEnums 1.0 CutegramEnums.qml
 singleton CutegramEmojis 1.0 CutegramEmojis.qml
 singleton CutegramSettings 1.0 CutegramSettings.qml
 singleton CutegramGlobals 1.0 CutegramGlobals.qml
+singleton TelegramColors 1.0 TelegramColors.qml
