@@ -24,7 +24,6 @@ Cutegram 3.x completely written using QML. So there is no need to build and comp
 #### telegram-app
 - [x] Use AdaptivePageLayout
 - [x] Minor main pages refactoring
-- [ ] Create a component in globals directory to store font sizes, colors, etc. (UPDATE: created globals/TelegramColors.qml)
 - [x] Merge Auth from v2 (partially-done/enough/missing-features)
 - [x] Merge AccountPage from v2 (partially-done/enough)
 - [x] Merge IntroPage from v2 (partially-done/enough)
@@ -34,12 +33,17 @@ Cutegram 3.x completely written using QML. So there is no need to build and comp
 - [ ] Merge ContactsPage and AddressBook from v2
 - [ ] Add ContentHub
 - [ ] Merge DialogPage from v2
-- [ ] Merge missing pages from v2 (and track missing features in lib/TelegramQML)
-- [ ] Add missing pages
-- [ ] Merge voice messages from v2 and messaging-app
 - [ ] Do not use Aseman.Keychain, write data in files as temporary workaround
-- [ ] Remove AsemanTools dependency
+- [ ] Fix copyright headers/Add contributors page
+- [ ] Track missing features in lib/TelegramQML
+
+#### telegram-app (after-alpha?)
+- [ ] Merge voice messages from v2 and messaging-app
+- [ ] Add missing pages (or merge them from v2)
 - [ ] Add ubuntu-push notifications
+- [ ] Create a component in globals directory to store font sizes, colors, etc.
+  - [x] Create globals/TelegramColors.qml
+- [ ] Remove AsemanTools dependency
 - [ ] Massive code cleanup
 
 #### libqtelegram/TelegramQML
@@ -48,7 +52,7 @@ Cutegram 3.x completely written using QML. So there is no need to build and comp
 - [x] Fix 2FA (@Flohack)
 - [ ] Fix logout
 
-#### Missing/Non-working features in reworked pages ####
+#### Missing/Non-working features in reworked pages/TelegramQML ####
 - [ ] SettingsPage: change name
 - [ ] SettingsPage: change username
 - [ ] SettingsPage: change profile photo
