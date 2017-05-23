@@ -42,7 +42,7 @@ Cutegram 3.x completely written using QML. So there is no need to build and comp
 - [ ] Add missing pages (or merge them from v2)
 - [ ] Add ubuntu-push notifications
 - [ ] Create a component in globals directory to store font sizes, colors, etc.
-- [x] Create globals/TelegramColors.qml
+  - [x] Create globals/TelegramColors.qml
 - [ ] Remove AsemanTools dependency
 - [ ] Massive code cleanup
 - [ ] Multiple accounts
