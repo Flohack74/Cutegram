@@ -5,6 +5,8 @@ import QtQuick.Controls 1.3
 import QtQuick.Window 2.2
 
 AsemanObject {
+    property string applicationVersion: "2.9.0"
+
     property AsemanWindow mainWindow
     property alias systemPalette: palette
 

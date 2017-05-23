@@ -21,6 +21,8 @@ AsemanObject {
     property alias masterColor: general.masterColor
     property alias minimalMode: general.minimalMode
 
+    property alias sendWithEnter: general.sendWithEnter // @TODO: implement this
+
     readonly property real messageItemRadius: 5*Devices.density
 
     Connections {
@@ -46,6 +48,8 @@ AsemanObject {
         property string defaultEmoji: "twemoji"
         property string masterColor: ""
         property bool minimalMode: false
+
+        property bool sendWithEnter: true
 
         property int trayIconStyle: 0
 

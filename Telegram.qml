@@ -17,7 +17,7 @@ MainView {
 
     property string appId: "com.ubuntu.telegram_telegram" // no-i18n
 
-    property string applicationVersion: "2.9.0"
+    property string applicationVersion: CutegramGlobals.applicationVersion
 
     /*Notification {
         id: notification
