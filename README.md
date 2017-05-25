@@ -1,4 +1,4 @@
-### telegram-app 3.0.0 (WIP)
+### telegram-app ~3.0.0 (ABANDONED)
 
 Forked from Cutegram by Aseman team.
 
