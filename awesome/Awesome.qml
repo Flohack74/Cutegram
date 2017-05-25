@@ -36,6 +36,7 @@ QtObject {
     readonly property string fa_500px: "\uf26e"
     readonly property string fa_adjust: "\uf042"
     readonly property string fa_adn: "\uf170"
+    readonly property string fa_address_book: "\uf2b9"
     readonly property string fa_align_center: "\uf037"
     readonly property string fa_align_justify: "\uf039"
     readonly property string fa_align_left: "\uf036"
