@@ -58,6 +58,10 @@ Rectangle {
                 console.debug("Engine state changed: %1".arg(engine.state))
                 pageStack.checkAuth(false)
             }
+            onPhoneNumberChanged: {
+                if (engine.phoneNumber.length == 0)
+                    pageStack.checkAuth(false)
+            }
         }
 
         function checkAuth(firstInitialize) {

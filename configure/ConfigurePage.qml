@@ -31,6 +31,14 @@ ToolKit.StackedPage {
         ]
     }
 
+    Connections {
+        target: engine
+        onAuthLoggedOut: {
+            stack.hideWaitOverlay();
+            engine.phoneNumber = ""
+        }
+    }
+
     objectName: "settingsPage"
 
     function changeFullName() {
@@ -366,27 +374,15 @@ ToolKit.StackedPage {
                 color: UbuntuColors.orange
                 onClicked: {
                     console.log("Logging out.");
-                    // Calling authLogOut here doesn't work.
-                    // This seems to be an SDK bug.
-                    logout_timer.start();
+                    engine.logout();
                     PopupUtils.close(logout_dialog);
+                    stack.showWaitOverlay(i18n.tr("Logging out..."));
                 }
             }
             Button {
                 text: i18n.tr("Cancel")
                 onClicked: PopupUtils.close(logout_dialog)
             }
-        }
-    }
-
-    Timer {
-        id: logout_timer
-        interval: 300
-        repeat: false
-
-        onTriggered: {
-            engine.logout();
-            engine.phoneNumber = "";
         }
     }
 }

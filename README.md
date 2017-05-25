@@ -30,6 +30,7 @@ Cutegram 3.x completely written using QML. So there is no need to build and comp
 - [x] Use AdaptivePageLayout
 - [x] Minor main pages refactoring
 - [x] Merge Auth from v2 (partially-done/enough/missing-features)
+- [x] Fix logout
 - [x] Merge AccountPage from v2 (partially-done/enough)
 - [x] Merge IntroPage from v2 (partially-done/enough)
 - [x] Merge SettingsPage from v2 (partially-done/enough/missing-features)
@@ -58,7 +59,7 @@ Cutegram 3.x completely written using QML. So there is no need to build and comp
 - [ ] Fix file transfers
 - [ ] Fix secret chats
 - [x] Fix 2FA (@Flohack)
-- [ ] Fix logout
+- [x] Fix logout (@Flohack)
 
 #### Missing/Non-working features in reworked pages/TelegramQML ####
 - [ ] SettingsPage: change name
