@@ -27,7 +27,10 @@ Panel {
     // This property must be set to desired max height value.
     property int maxHeight: units.gu(16)
 
-    signal addNewClicked()
+    /*signal addNewClicked()*/
+    signal newGroupClicked()
+    signal newSecretChatClicked()
+
     signal contactsClicked()
     signal settingsClicked()
     signal faqClicked()
@@ -72,7 +75,7 @@ Panel {
                 left: parent.left
             }
 
-            AccountPanelItem {
+            /*AccountPanelItem {
                 objectName:"addNewItem"
                 icon: Awesome.fa_plus
                 text: i18n.tr("Add new...")
@@ -81,10 +84,10 @@ Panel {
                     panel.close();
                     panel.addNewClicked();
                 }
-            }
-            /*AccountPanelItem {
+            }*/
+            AccountPanelItem {
                 objectName:"groupChatItem"
-                icon: "../files/menu_newgroup.png"
+                icon: Awesome.fa_users
                 text: i18n.tr("New Group")
                 showDivider: false
                 onClicked: {
@@ -94,16 +97,16 @@ Panel {
             }
             AccountPanelItem {
                 objectName:"secretChatItem"
-                icon: "../files/menu_secret.png"
+                icon: Awesome.fa_user_secret
                 text: i18n.tr("New Secret Chat")
                 onClicked: {
                     panel.close();
                     panel.newSecretChatClicked();
                 }
-            }*/
+            }
             AccountPanelItem {
                 objectName:"panelContacts"
-                icon: Awesome.fa_users
+                icon: Awesome.fa_address_book
                 text: i18n.tr("Contacts")
                 showDivider: false
                 onClicked: {

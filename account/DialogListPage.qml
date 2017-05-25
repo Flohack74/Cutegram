@@ -22,7 +22,9 @@ Components.Page {
         }
     }
 
-    signal addNewClicked()
+    //signal addNewClicked()
+    signal newGroupClicked()
+    signal newSecretChatClicked()
     signal contactsClicked()
     signal settingsClicked()
 
@@ -42,7 +44,9 @@ Components.Page {
         maxHeight: parent.height - units.gu(7)
         z: 10
 
-        onAddNewClicked: dialogListPage.addNewClicked()
+        /*onAddNewClicked: dialogListPage.addNewClicked()*/
+        onNewGroupClicked: dialogListPage.newGroupClicked()
+        onNewSecretChatClicked: dialogListPage.newSecretChatClicked()
         onContactsClicked: dialogListPage.contactsClicked()
         onSettingsClicked: dialogListPage.settingsClicked()
 
