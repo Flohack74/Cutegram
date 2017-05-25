@@ -1,6 +1,7 @@
 import QtQuick 2.4
 import TelegramQml 2.0 as Telegram
 import AsemanTools 1.0 as Aseman
+import Qt.labs.settings 1.0
 import "../globals"
 
 Telegram.Engine {
@@ -29,14 +30,34 @@ Telegram.Engine {
         id: encr
     }
 
-    Aseman.Keychain {
+    Settings {
         id: keychain
-        service: "Cutegram"
+        property string jsonData: ""
+
+        category: "Cutegram"
+
+        function readData(key) {
+            var data = JSON.parse(jsonData);
+            if (key in data)
+                return data[key]
+            else
+                return ""
+        }
+
+        function writeData(key, value) {
+            var data = JSON.parse(jsonData);
+            data[key] = value;
+            jsonData = JSON.stringify(data);
+            return true
+        }
+
         Component.onCompleted: {
-            var key = read("encryptKey")
+            if (jsonData.length == 0)
+                jsonData = JSON.stringify({});
+            var key = readData("encryptKey")
             if(key.length == 0) {
                 key = Aseman.Tools.createUuid()
-                write("encryptKey", key)
+                writeData("encryptKey", key)
             }
             encr.key = key
         }

@@ -9,6 +9,11 @@ Forked from Cutegram by Aseman team.
 - Remove old installations of libqtelegram-aseman-edition and TelegramQML
 - https://github.com/Aseman-Land/Cutegram/blob/master/README.md
 
+Be sure to use following repositories for above libraries:
+
+- https://github.com/yunit-io/libqtelegram-aseman-edition (branch: ubports-2fa-3.x)
+- https://github.com/yunit-io/TelegramQML (branch: ubports-fixes-old3.x)
+
 #### 2. Build aseman-qt-tools
 
 https://github.com/Aseman-Land/aseman-qt-tools/blob/master/documents/gettingstarted.md
@@ -33,9 +38,10 @@ Cutegram 3.x completely written using QML. So there is no need to build and comp
 - [ ] Merge ContactsPage and AddressBook from v2
 - [x] Merge ContentHub (MediaImport) from v2
 - [ ] Merge DialogPage from v2
-- [ ] Do not use Aseman.Keychain, write data in files as temporary workaround
+- [x] Do not use Aseman.Keychain, write data in files as temporary workaround
 - [ ] Fix copyright headers/Add contributors page
 - [ ] Track missing features in lib/TelegramQML
+- [ ] Fix file transfers (it could be a regression)
 
 #### telegram-app (after-alpha?)
 - [ ] Merge voice messages from v2 and messaging-app
@@ -44,8 +50,9 @@ Cutegram 3.x completely written using QML. So there is no need to build and comp
 - [ ] Create a component in globals directory to store font sizes, colors, etc.
   - [x] Create globals/TelegramColors.qml
 - [ ] Remove AsemanTools dependency
-- [ ] Massive code cleanup
+- [ ] Massive code cleanup/stupid-ugly code removal
 - [ ] Multiple accounts
+- [ ] Create a real replacement for Aseman.Keychan, stored data must be encrypted
 
 #### libqtelegram/TelegramQML
 - [ ] Fix file transfers
